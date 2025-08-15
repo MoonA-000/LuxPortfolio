@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Learning Hub – study tools, notes, and resources to help you succeed." />
+  <meta property="og:title" content="Learning Hub" />
+  <meta property="og:description" content="Study tools, notes, and resources to help you succeed." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0f766e" />
+  <title>Learning Hub</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="assets/icon.svg" alt="Learning Hub" class="brand-icon" />
+        <span class="brand-name">Learning Hub</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="#tools" class="nav-link">Study Tools</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="pages/privacy.html" class="nav-link">Privacy</a>
+        <a href="pages/terms.html" class="nav-link">Terms</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Study smarter with Learning Hub</h1>
+        <p class="subtitle">Simple, distraction‑free tools to help you stay on track.</p>
+        <div class="cta-row">
+          <a href="#tools" class="button button-primary">Open Study Tools</a>
+          <a href="#about" class="button button-ghost">Learn more</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- AD SLOT (Insert your approved ad network code here when ready) -->
+    <div class="container ad-slot" aria-label="Sponsored content placeholder">
+      <div class="ad-placeholder">Ad space</div>
+    </div>
+
+    <section id="tools" class="tools-section">
+      <div class="container grid">
+        <article class="card">
+          <h2>Pomodoro Timer</h2>
+          <p>Work in focused intervals with short breaks to maintain momentum.</p>
+          <div class="pomodoro">
+            <div class="timer-display" id="timer-display">25:00</div>
+            <div class="timer-controls">
+              <button id="start-timer" class="button button-primary">Start</button>
+              <button id="pause-timer" class="button">Pause</button>
+              <button id="reset-timer" class="button button-ghost">Reset</button>
+            </div>
+            <div class="timer-settings">
+              <label>
+                Focus (minutes)
+                <input id="focus-minutes" type="number" min="1" value="25" />
+              </label>
+              <label>
+                Break (minutes)
+                <input id="break-minutes" type="number" min="1" value="5" />
+              </label>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Quick Flashcards</h2>
+          <p>Enter a term and its definition, then practice flipping the card.</p>
+          <div class="flashcards">
+            <div class="flashcard-form">
+              <input id="flash-term" placeholder="Term" />
+              <input id="flash-definition" placeholder="Definition" />
+              <button id="add-flashcard" class="button">Add</button>
+            </div>
+            <ul id="flash-list" class="flash-list" aria-live="polite"></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="container">
+        <h2>About</h2>
+        <p>Learning Hub is an independent, student‑friendly resource offering simple tools and notes. It is not affiliated with any school or district.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Learning Hub • Not affiliated with any school or district.</p>
+      <div class="footer-links">
+        <a href="pages/privacy.html">Privacy</a>
+        <a href="pages/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

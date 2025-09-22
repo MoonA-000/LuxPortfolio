@@ -1,85 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Quote Generator</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Link Helper — HTML‑only, Compliant</title>
+  <meta name="description" content="A simple, HTML‑only page to paste a YouTube link and learn legal, compliant ways to get a copy of your video.">
+  <style>
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: #0f172a;
+      background: linear-gradient(135deg, #0ea5e9 0%, #7c3aed 35%, #111827 100%);
+      background-attachment: fixed;
+    }
+
+    /* Layout */
+    .page {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #e5e7eb;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .brand-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: radial-gradient(120% 120% at 20% 20%, #22d3ee 0%, #a78bfa 38%, #1f2937 100%);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.35) inset, 0 2px 8px rgba(255,255,255,0.08);
+      display: inline-block;
+    }
+
+    main { display: grid; place-items: center; padding: 32px 16px; }
+
+    .card {
+      width: 100%;
+      max-width: 980px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.35),
+        0 1px 0 rgba(255,255,255,0.15) inset;
+      overflow: hidden;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 32px 28px 10px 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(14, 165, 233, 0.08) 100%);
+    }
+    .title { font-size: 28px; line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.3px; }
+    .subtitle { margin: 0; color: #334155; font-size: 15px; }
+
+    /* Input section */
+    .section { padding: 22px 28px; border-top: 1px solid #e5e7eb; }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .url-input {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      outline: none;
+      font-size: 15px;
+    }
+    .url-input:focus { border-color: #7c3aed; box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: not-allowed; /* disabled by design (HTML-only, compliant) */
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .btn.secondary { background: #111827; color: #ffffff; cursor: pointer; }
+    .btn.link { background: #f1f5f9; color: #111827; text-decoration: none; display: inline-flex; align-items: center; }
+
+    .note {
+      font-size: 13px;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px 12px;
+      border-radius: 10px;
+    }
+
+    /* Legal + How-to */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    @media (min-width: 820px) {
+      .columns { grid-template-columns: 1.2fr 1fr; }
+    }
+
+    .panel {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 16px;
+    }
+
+    .panel h3 { margin: 0 0 8px; font-size: 16px; }
+    .panel p { margin: 8px 0; color: #334155; font-size: 14px; }
+
+    .list { margin: 10px 0 0; padding-left: 18px; }
+    .list li { margin: 6px 0; color: #0f172a; }
+
+    code.inline { background: #e2e8f0; border-radius: 6px; padding: 2px 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 13px; }
+
+    footer {
+      color: #cbd5e1;
+      text-align: center;
+      padding: 28px 16px 40px;
+      font-size: 13px;
+    }
+    footer a { color: #e2e8f0; text-decoration: underline; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="title">
-                <i class="fas fa-quote-left"></i>
-                Random Quote Generator
-                <i class="fas fa-quote-right"></i>
-            </h1>
-            <p class="subtitle">Discover inspiring quotes from great minds</p>
-        </header>
+  <div class="page">
+    <header>
+      <a class="brand" href="#" aria-label="Home">
+        <span class="brand-badge" aria-hidden="true"></span>
+        <span>Video Link Helper</span>
+      </a>
+      <nav aria-label="Main">
+        <a class="brand" href="#legal">Legal</a>
+      </nav>
+    </header>
 
-        <main class="main-content">
-            <div class="quote-card">
-                <div class="quote-content">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <p id="quote-text" class="quote-text">Click the button below to generate a random quote!</p>
-                    <i class="fas fa-quote-right quote-icon"></i>
-                </div>
-                <div class="quote-author">
-                    <span id="quote-author" class="author-name">— Welcome</span>
-                </div>
-                <div class="quote-category">
-                    <span id="quote-category" class="category-tag">Inspiration</span>
-                </div>
+    <main>
+      <article class="card" role="region" aria-label="YouTube link helper">
+        <div class="hero">
+          <h1 class="title">Paste a YouTube link. Learn compliant ways to get your video.</h1>
+          <p class="subtitle">This HTML‑only page does not download videos. It explains allowed options to obtain a copy while respecting YouTube’s Terms of Service and copyright law.</p>
+        </div>
+
+        <section class="section" aria-labelledby="link-input">
+          <h2 id="link-input" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Paste link</h2>
+          <div class="input-row">
+            <label for="yt-url" style="font-weight:600; color:#0f172a;">YouTube URL</label>
+            <input id="yt-url" class="url-input" type="url" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" inputmode="url" spellcheck="false" autocomplete="off">
+            <div class="btn-row">
+              <a class="btn secondary" href="https://studio.youtube.com/" target="_blank" rel="noopener">Open YouTube Studio</a>
+              <a class="btn link" href="https://takeout.google.com/" target="_blank" rel="noopener">Google Takeout</a>
+              <a class="btn link" href="https://support.google.com/youtube/answer/56100" target="_blank" rel="noopener">YouTube TOS</a>
             </div>
+            <p class="note" id="disclaimer">This is an HTML‑only page and cannot download from YouTube. For your own content, use <strong>YouTube Studio</strong> (download your uploads) or <strong>Google Takeout</strong> (export your library). Downloading videos you do not own or have permission to use may violate YouTube’s Terms of Service.</p>
+          </div>
+        </section>
 
-            <div class="controls">
-                <button id="generate-btn" class="generate-btn">
-                    <i class="fas fa-random"></i>
-                    Generate Quote
-                </button>
-                <button id="copy-btn" class="copy-btn" title="Copy to clipboard">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <button id="share-btn" class="share-btn" title="Share quote">
-                    <i class="fas fa-share-alt"></i>
-                </button>
+        <section class="section" id="legal" aria-labelledby="legal-heading">
+          <h2 id="legal-heading" style="margin:0 0 10px; font-size:18px;">How to get a copy legally</h2>
+          <div class="columns">
+            <div class="panel">
+              <h3>If you own the video (best option)</h3>
+              <ol class="list">
+                <li>Open <a href="https://studio.youtube.com/" target="_blank" rel="noopener">YouTube Studio</a>.</li>
+                <li>Go to <strong>Content</strong> → find your video.</li>
+                <li>Click the three‑dot menu (<strong>Options</strong>) → <strong>Download</strong>.</li>
+              </ol>
+              <p>This is officially supported and preserves quality.</p>
             </div>
-
-            <div class="category-filters">
-                <h3>Filter by Category:</h3>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-category="all">All</button>
-                    <button class="filter-btn" data-category="inspiration">Inspiration</button>
-                    <button class="filter-btn" data-category="success">Success</button>
-                    <button class="filter-btn" data-category="wisdom">Wisdom</button>
-                    <button class="filter-btn" data-category="love">Love</button>
-                    <button class="filter-btn" data-category="life">Life</button>
-                </div>
+            <div class="panel">
+              <h3>If you have permission from the owner</h3>
+              <ul class="list">
+                <li>Ask the owner to share the original file (e.g., via Drive, Dropbox, or direct transfer).</li>
+                <li>Alternatively, they can temporarily grant you access to download in their YouTube Studio.</li>
+              </ul>
+              <p>Make sure you have written permission when applicable.</p>
             </div>
-
-            <div class="stats">
-                <div class="stat-item">
-                    <i class="fas fa-quote-left"></i>
-                    <span id="quotes-generated">0</span>
-                    <span>Quotes Generated</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-heart"></i>
-                    <span id="favorites-count">0</span>
-                    <span>Favorites</span>
-                </div>
+            <div class="panel">
+              <h3>Premium offline viewing (mobile)</h3>
+              <ul class="list">
+                <li>With <strong>YouTube Premium</strong>, some videos can be saved for offline viewing in the app.</li>
+                <li>This is not a transferable file, but can satisfy travel/offline needs.</li>
+              </ul>
             </div>
-        </main>
+          </div>
+        </section>
 
-        <footer class="footer">
-            <p>&copy; 2024 Random Quote Generator. Made with <i class="fas fa-heart"></i> for inspiration.</p>
-        </footer>
-    </div>
+        <section class="section" aria-labelledby="embed-heading">
+          <h2 id="embed-heading" style="margin:0 0 10px; font-size:18px;">Optional: make an embed link</h2>
+          <div class="panel">
+            <p>You can quickly build an embed URL to preview a video on any site that allows iframes. Replace the watch link like this:</p>
+            <p><code class="inline">https://www.youtube.com/watch?v=VIDEO_ID</code> → <code class="inline">https://www.youtube.com/embed/VIDEO_ID</code></p>
+            <p>Then place it inside:</p>
+            <pre style="margin:10px 0; padding:12px; background:#0f172a; color:#e5e7eb; border-radius:12px; overflow:auto;"><code>&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;</code></pre>
+            <p>This is for viewing only, not downloading.</p>
+          </div>
+        </section>
+      </article>
+    </main>
 
-    <div id="notification" class="notification"></div>
-    
-    <script src="script.js"></script>
+    <footer>
+      <p>Built as an <strong>HTML‑only</strong> page. No JavaScript. No server. Keep it compliant and respectful of creators’ rights.</p>
+    </footer>
+  </div>
 </body>
 </html>

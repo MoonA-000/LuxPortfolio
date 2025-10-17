@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing • Acme SaaS</title>
+  <meta name="description" content="Simple transparent pricing. Start free, upgrade anytime.">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="brand">
+        <img src="../assets/logo.svg" alt="Acme" class="brand-icon" />
+        <span class="brand-name">Acme</span>
+      </a>
+      <nav class="nav">
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="#" class="button button-primary">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h1>Pricing</h1>
+        <p class="subtitle">Start free. Switch plans anytime.</p>
+
+        <label class="card" style="display:inline-flex;align-items:center;gap:10px;margin:12px 0">
+          <input id="billing-toggle" type="checkbox" />
+          <span>Bill yearly and save 20%</span>
+        </label>
+
+        <div class="grid three">
+          <article class="card">
+            <h3>Starter</h3>
+            <p>For individuals and small projects.</p>
+            <p><strong data-price-monthly>$12</strong><strong data-price-yearly style="display:none">$9</strong> / user</p>
+            <a href="#" class="button button-primary">Get started</a>
+          </article>
+          <article class="card">
+            <h3>Team</h3>
+            <p>For growing teams that need collaboration.</p>
+            <p><strong data-price-monthly>$29</strong><strong data-price-yearly style="display:none">$23</strong> / user</p>
+            <a href="#" class="button button-primary">Start trial</a>
+          </article>
+          <article class="card">
+            <h3>Business</h3>
+            <p>For organizations with security needs.</p>
+            <p><strong data-price-monthly>$79</strong><strong data-price-yearly style="display:none">$63</strong> / user</p>
+            <a href="#" class="button button-primary">Contact sales</a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Acme, Inc.</p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

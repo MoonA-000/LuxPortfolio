@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acme SaaS — Do more with less</title>
+  <meta name="description" content="Acme SaaS helps teams automate busywork and scale operations.">
+  <meta property="og:title" content="Acme SaaS" />
+  <meta property="og:description" content="Automate busywork. Scale operations." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#111827" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand" aria-label="Acme SaaS home">
+        <img src="assets/logo.svg" alt="Acme SaaS" class="brand-icon" />
+        <span class="brand-name">Acme</span>
+      </a>
+      <nav class="nav">
+        <a href="pages/pricing.html" class="nav-link">Pricing</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="pages/contact.html" class="nav-link">Contact</a>
+        <a href="#" class="button button-primary">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>Ship faster. Operate smarter.</h1>
+          <p class="subtitle">All‑in‑one workflow automation that saves teams hours every week.</p>
+          <div class="cta-row">
+            <a href="pages/pricing.html" class="button button-primary">Start free trial</a>
+            <a href="#features" class="button button-ghost">See features</a>
+          </div>
+          <div class="trust">
+            <img src="assets/badges.svg" alt="Security and compliance badges" />
+            <span>ISO‑27001 • SOC‑2 • SSO/SAML</span>
+          </div>
+        </div>
+        <div class="hero-media" aria-hidden="true">
+          <div class="demo-window">
+            <div class="window-chrome">
+              <span></span><span></span><span></span>
+            </div>
+            <img src="assets/hero-illustration.svg" alt="Product screenshot" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="container grid three">
+        <article class="card feature">
+          <h3>Automations</h3>
+          <p>Trigger workflows on webhooks, schedules, or app events—no code required.</p>
+        </article>
+        <article class="card feature">
+          <h3>Integrations</h3>
+          <p>Connect 100+ popular tools including Slack, Stripe, Airtable, and Gmail.</p>
+        </article>
+        <article class="card feature">
+          <h3>Analytics</h3>
+          <p>Measure ROI with real‑time dashboards and exportable reports.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container testimonial">
+        <blockquote>
+          <p>“Acme saves us ~12 hours per week. Our onboarding is now a breeze.”</p>
+          <footer>— Casey W., Ops Lead</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="container">
+        <h2>Frequently asked questions</h2>
+        <details>
+          <summary>Do you offer a free trial?</summary>
+          <p>Yes, 14 days, no credit card required.</p>
+        </details>
+        <details>
+          <summary>Can I cancel anytime?</summary>
+          <p>Absolutely. Billing stops at the end of your current cycle.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Acme, Inc.</p>
+      <div class="footer-links">
+        <a href="pages/privacy.html">Privacy</a>
+        <a href="pages/terms.html">Terms</a>
+        <a href="sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

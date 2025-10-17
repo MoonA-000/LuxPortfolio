@@ -6,12 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "worker": "tsx src/worker.ts"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.0",
+    "@prisma/client": "^6.17.1",
+    "bullmq": "^5.61.0",
+    "ioredis": "^5.8.1",
     "next": "15.5.6",
+    "next-auth": "^4.24.11",
+    "prisma": "^6.17.1",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -22,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.6",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }

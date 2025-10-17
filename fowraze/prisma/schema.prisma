@@ -1,0 +1,359 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================
+// NextAuth core models
+// =============================
+
+model User {
+  id             String                  @id @default(cuid())
+  name           String?
+  email          String?                 @unique
+  emailVerified  DateTime?
+  image          String?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  // Relations
+  accounts       Account[]
+  sessions       Session[]
+  memberships    OrganizationMembership[]
+  activities     ActivityLog[]
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// =============================
+// Core domain models
+// =============================
+
+model Organization {
+  id          String                    @id @default(cuid())
+  name        String
+  slug        String                    @unique
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+
+  // Relations
+  members     OrganizationMembership[]
+  clients     Client[]
+  quotes      Quote[]
+  invoices    Invoice[]
+  payments    Payment[]
+  integrations IntegrationAccount[]
+  rules       AutomationRule[]
+  runs        AutomationRun[]
+  threads     EmailThread[]
+  events      Event[]
+  activities  ActivityLog[]
+}
+
+model OrganizationMembership {
+  id             String            @id @default(cuid())
+  organizationId String
+  userId         String
+  role           OrganizationRole  @default(MEMBER)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Client {
+  id             String        @id @default(cuid())
+  organizationId String
+  name           String
+  email          String?
+  phone          String?
+  address        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  quotes   Quote[]
+  invoices Invoice[]
+  threads  EmailThread[]
+  events   Event[]
+
+  @@index([organizationId, name])
+}
+
+model Quote {
+  id             String       @id @default(cuid())
+  organizationId String
+  clientId       String
+  number         Int
+  status         QuoteStatus  @default(DRAFT)
+  subtotal       Decimal      @db.Decimal(12, 2)
+  tax            Decimal      @db.Decimal(12, 2) @default(0)
+  total          Decimal      @db.Decimal(12, 2)
+  validUntil     DateTime?
+  sentAt         DateTime?
+  acceptedAt     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client       @relation(fields: [clientId], references: [id])
+
+  items   QuoteItem[]
+  invoice Invoice?
+
+  @@index([organizationId, clientId])
+  @@unique([organizationId, number])
+}
+
+model QuoteItem {
+  id          String   @id @default(cuid())
+  quoteId     String
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Decimal  @db.Decimal(12, 2)
+  lineTotal   Decimal  @db.Decimal(12, 2)
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id             String         @id @default(cuid())
+  organizationId String
+  clientId       String
+  quoteId        String?
+  number         Int
+  status         InvoiceStatus  @default(DRAFT)
+  subtotal       Decimal        @db.Decimal(12, 2)
+  tax            Decimal        @db.Decimal(12, 2) @default(0)
+  total          Decimal        @db.Decimal(12, 2)
+  paidAmount     Decimal        @db.Decimal(12, 2) @default(0)
+  dueDate        DateTime?
+  sentAt         DateTime?
+  paidAt         DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client       @relation(fields: [clientId], references: [id])
+  quote        Quote?       @relation(fields: [quoteId], references: [id])
+
+  items    InvoiceItem[]
+  payments Payment[]
+
+  @@unique([organizationId, number])
+  @@unique([quoteId])
+  @@index([organizationId, clientId])
+}
+
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Decimal  @db.Decimal(12, 2)
+  lineTotal   Decimal  @db.Decimal(12, 2)
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id             String   @id @default(cuid())
+  invoiceId      String
+  organizationId String
+  amount         Decimal  @db.Decimal(12, 2)
+  source         String
+  externalId     String?
+  createdAt      DateTime @default(now())
+
+  invoice       Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([organizationId])
+}
+
+enum Provider {
+  GMAIL
+  GOOGLE_CALENDAR
+  QUICKBOOKS
+  STRIPE
+}
+
+model IntegrationAccount {
+  id             String    @id @default(cuid())
+  organizationId String
+  provider       Provider
+  accessToken    String?   @db.Text
+  refreshToken   String?   @db.Text
+  expiresAt      DateTime?
+  scope          String?
+  externalId     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, provider])
+}
+
+enum AutomationTrigger {
+  EMAIL_TO_QUOTE
+  QUOTE_FOLLOW_UP
+  INVOICE_REMINDER
+  APPOINTMENT_SCHEDULING
+}
+
+enum AutomationRunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model AutomationRule {
+  id             String             @id @default(cuid())
+  organizationId String
+  name           String
+  trigger        AutomationTrigger
+  filters        Json?
+  action         Json?
+  schedule       Json?
+  enabled        Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  runs         AutomationRun[]
+}
+
+model AutomationRun {
+  id             String               @id @default(cuid())
+  ruleId         String
+  organizationId String
+  status         AutomationRunStatus  @default(PENDING)
+  logs           String?              @db.Text
+  startedAt      DateTime?
+  finishedAt     DateTime?
+  createdAt      DateTime             @default(now())
+
+  rule          AutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+model EmailThread {
+  id                String    @id @default(cuid())
+  organizationId    String
+  clientId          String?
+  providerThreadId  String
+  lastHistoryId     String?
+  lastActivityAt    DateTime?
+  createdAt         DateTime  @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  @@unique([organizationId, providerThreadId])
+}
+
+model Event {
+  id               String    @id @default(cuid())
+  organizationId   String
+  clientId         String?
+  providerEventId  String?
+  title            String
+  description      String?
+  start            DateTime
+  end              DateTime
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+}
+
+model ActivityLog {
+  id             String    @id @default(cuid())
+  organizationId String
+  userId         String?
+  action         String
+  entityType     String
+  entityId       String
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  EXPIRED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELED
+}
